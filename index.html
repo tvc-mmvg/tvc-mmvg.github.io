@@ -1,1 +1,1270 @@
-hello world!
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <title>TVC</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+        body {
+            width: 1200px;
+            margin: auto;
+            font-family: "Nunito";
+        }
+        a {
+            color: #1772d0;
+            text-decoration: none;
+        }
+        a:focus, a:hover {
+            color: #f09228;
+            text-decoration: none;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        }
+        th {
+            width: 128px;
+            font-size: 20px;
+            
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #eee;
+
+            text-align: center;
+        }
+        td {
+            width: 128px;
+            height: 120px;
+        }
+        td img {
+            display: block;
+            margin: auto;
+            width: 120px;
+        }
+    </style>
+    
+    <script>
+        function show(img) {
+            if (img.src.endsWith("press.jpg") == true) {
+                img.src = img.id;
+            }
+            else {
+                img.src = "./press.jpg";
+            }
+        }
+    </script>
+
+    <style>
+        .nav-tabs > li, .nav-pills > li {
+            float:none;
+            display: inline-block;
+        }
+        .nav-tabs, .nav-pills {
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <center><h1><B>Tell Me What Happened: Unifying Text-guided Video Completion<br>via Multimodal Masked Video Generation</B></h1></center>
+    <br />
+    <center><img src="./mmvg.jpg" style="width: 800px;" /></center>
+    <br />
+    <center>
+        <h2>Abstract</h2>
+        <p style="width: 640px; margin: 0 auto; text-align: justify; text-justify: inter-ideograph; font-size: 16px;">Generating a video given the first several static frames is challenging as it anticipates reasonable future frames with temporal coherence. Besides video prediction, the ability to rewind from the last frame or infilling between the head and tail is also crucial, but they have rarely been explored for video completion. Since there could be different outcomes from the hints of just a few frames, a system that can follow natural language to perform video completion may significantly improve controllability. Inspired by this, we introduce a novel task, text-guided video completion (<tt>TVC</tt>), which requests the model to generate a video from partial frames guided by an instruction. We then propose Multimodal Masked Video Generation (MMVG) to address this <tt>TVC</tt> task. During training, MMVG discretizes the video frames into visual tokens and masks most of them to perform video completion from any time point. At inference time, a single MMVG model can address all 3 cases of <tt>TVC</tt>, including video prediction, rewind, and infilling, by applying corresponding masking conditions. We evaluate MMVG in various video scenarios, including egocentric, animation, and gaming. Extensive experimental results indicate that MMVG is effective in generating high-quality visual appearances with text guidance for <tt>TVC</tt>.</p>
+    </center>
+    <br /> <hr />
+    <center>
+        <h2>Qualitative Results</h2>
+        <p style="font-size: 18px;">👇 press the tab for different tasks and datasets</p>
+    </center>
+    <center><ul class="nav nav-tabs" style="width: 1150px;">
+        <li class="dropdown">
+            <a href="#" id="tab-vp" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Video Prediction (<I>K</I>=1)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-vp">
+                <li><a href="#vp-kitchen" tabindex="-1" data-toggle="tab"><center>Kitchen (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vp-flintstones" tabindex="-1" data-toggle="tab"><center>Flintstones (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vp-mugen" tabindex="-1" data-toggle="tab"><center>MUGEN (128<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-vr" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Video Rewind (<I>K</I>=-1)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-vr">
+                <li><a href="#vr-kitchen" tabindex="-1" data-toggle="tab"><center>Kitchen (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vr-flintstones" tabindex="-1" data-toggle="tab"><center>Flintstones (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vr-mugen" tabindex="-1" data-toggle="tab"><center>MUGEN (128<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-vi" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Video Infilling (<I>K</I>=±1)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-vi">
+                <li><a href="#vi-kitchen" tabindex="-1" data-toggle="tab"><center>Kitchen (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vi-flintstones" tabindex="-1" data-toggle="tab"><center>Flintstones (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vi-mugen" tabindex="-1" data-toggle="tab"><center>MUGEN (128<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-vpk" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Video Prediction (Different <I>K</I>)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-vpk">
+                <li><a href="#vpk-kitchen" tabindex="-1" data-toggle="tab"><center>Kitchen (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vpk-flintstones" tabindex="-1" data-toggle="tab"><center>Flintstones (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vpk-mugen" tabindex="-1" data-toggle="tab"><center>MUGEN (128<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-c" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Control by Different Text</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-c">
+                <li><a href="#cp" tabindex="-1" data-toggle="tab"><center>Prediction</center></a></li>
+                <li><a href="#cr" tabindex="-1" data-toggle="tab"><center>Rewind</center></a></li>
+                <li><a href="#ci" tabindex="-1" data-toggle="tab"><center>Infilling</center></a></li>
+            </ul>
+        </li>
+    </ul></center>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="vp-kitchen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="6">Kitchen (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>w/o Text</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>TATS</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--p05_09_18-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_0_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>open cupboard</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_0_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p22_02_176-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_1_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>turn on tap</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_1_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p22_04_97-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_2_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>put down cloth</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_2_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p18_03_4-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_3_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>put plate on counter</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_3_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p22_02_159-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_4_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>put down cup</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_4_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p18_05_110-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_5_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_5_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>pour water in pot</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_5_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_5_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_5_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p22_02_147-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_6_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_6_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>rinse plate</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_6_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_6_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_6_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p01_11_143-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_7_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_7_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>open fridge</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_7_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_7_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_7_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p08_17_96-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_8_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_8_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>place pan</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_8_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_8_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_8_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p26_36_25-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_9_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_9_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>close lid</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_9_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_9_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_kitchen_9_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vp-flintstones">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="6">Flintstones (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>w/o Text</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>TATS</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--s_05_e_24_shot_003188_003262-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_0_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>They are looking at each other while<br>Fred is speaking.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_0_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_05_e_05_shot_013233_013307-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_1_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Barney is in the<br>living room, talking.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_1_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_05_shot_020834_020908-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_2_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma is in a car<br>and talking about something.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_2_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_03_e_02_shot_016221_016295-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_3_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred is talking<br>to Barney and<br>turning his head.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_3_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_01_e_09_shot_029821_029895-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_4_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Betty is talking in<br>the living room<br>and nodding.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_4_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_01_e_27_shot_026596_026670-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_5_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_5_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred is walking<br>across a room,<br>talking to himself.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_5_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_5_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_5_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_04_e_21_shot_025014_025088-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_6_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_6_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Betty is quickly opening and closing<br>a window blind.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_6_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_6_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_6_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_18_shot_022535_022609-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_7_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_7_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred is walking outside while he<br>is looking behind.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_7_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_7_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_7_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_10_shot_022616_022690-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_8_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_8_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma gestures<br>with one hand<br>while talking.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_8_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_8_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_8_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_03_e_14_shot_005036_005110-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_9_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_9_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Barney is in the<br>car talking and laughing.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_9_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_9_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_flintstones_9_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vp-mugen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="6">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>w/o Text</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>TATS</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_608_level_2339_video_frames_0186_to_0281-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_0_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen lands on a snail to crush it. It walks right to collect coins and turns left.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_0_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_jump_penalty_2_seed_706_level_1916_video_frames_0454_to_0549-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_1_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs from left to right, collects coin, jumps to hit face,  and jumps to down.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_1_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_0_seed_804_level_3821_video_frames_0235_to_0330-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_2_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks to<br>the right across a platform. It picks up a gem and a coin before crushing a worm.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_2_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_squat_penalty_timeout_300_seed_613_level_0833_video_frames_0102_to_0197-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_3_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps over<br>a gear and then collects a coin.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_3_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_814_level_3186_video_frames_0325_to_0420-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_4_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps and moves left. And<br>then collects three coins and a gem.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_4_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_squat_penalty_die_reward_2.0_seed_610_level_2266_video_frames_0247_to_0342-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_5_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_5_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs from right to left and it collect coins there. It saw a ladybug so it runs from left to right.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_5_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_5_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_5_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_608_level_0324_video_frames_0038_to_0133-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_6_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_6_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps down and up to collect a coin. Then it jumps left from right to collect the coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_6_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_6_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_6_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_jump_penalty_seed_807_level_0780_video_frames_0223_to_0318-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_7_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_7_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen climbs up the ladder and moves to the right. It jumps again and gets killed.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_7_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_7_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_7_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_squat_penalty_timeout_300_seed_406_level_0909_video_frames_0081_to_0176-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_8_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_8_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks to the right, gets a gem, and then jumps up to a platform for coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_8_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_8_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_8_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_0_seed_704_level_1951_video_frames_0476_to_0571-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_9_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_9_vb.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps down to the middle floor to knock the worm and jumps down to the ground floor.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_9_tats.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_9_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vp_mugen_9_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vr-kitchen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="4">Kitchen (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--p08_15_33-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>turn tap water off</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p02_12_367-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>open oven</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p28_16_16-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>put down pepper</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p01_12_38-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>close drawer</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p02_12_328 -->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>add olive oil</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_kitchen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vr-flintstones">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="4">Flintstones (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--s_01_e_11_shot_021954_022028-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Betty is in the<br>living room<br>reading the paper.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_30_shot_028994_029068-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma is riding in<br>the car and talking.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_03_e_08_shot_027533_027607-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Barney is talking<br>at the window.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_01_e_01_shot_003850_003924-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred stands over<br>the fence to have<br>a glimpse.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_03_e_04_shot_006116_006190-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma is standing<br>in the kitchen. She turns her head<br>then she speaks.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_flintstones_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vr-mugen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="4">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_814_level_3831_video_frames_0231_to_0326-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs from right to left and<br>gets the coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_814_level_1960_video_frames_0126_to_0221-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs from left to right, collects some coins, and kills a snail. And it jumps down.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_814_level_2659_video_frames_0190_to_0285-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps to stage. It runs from<br>left to right, collects<br>a coin, and jumps<br>over a worm. Then<br>it jumps up.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_814_level_2261_video_frames_0127_to_0222-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps over<br>a box and then<br>towards a coin.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_largearch_bump_head_penalty_0.05_0_seed_714_level_0706_video_frames_0301_to_0396-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps up<br>and gets the coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vr_mugen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vi-kitchen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">Kitchen (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--p01_11_0-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>take plate</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p03_24_98-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>turn down hob</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p08_16_66-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>take lid off</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p03_23_80-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>grab salt</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p18_12_0-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>put plates in sink</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_kitchen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vi-flintstones">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">Flintstones (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--s_02_e_10_shot_021627_021701-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Barney is trying<br>to sing in a<br>living room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_05_e_10_shot_007469_007543-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma is talking<br>and holds a<br>finger over her lips.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_01_e_10_shot_013614_013688-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred and Barney speak out loud.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_06_e_10_shot_008994_009068-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma looks back<br>at Betty who is speaking then she turns her head.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_06_e_25_shot_031878_031952-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred and Wilma<br>are dancing<br>across a room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_flintstones_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vi-mugen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text</th>
+                    <th>Ours</th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_703_level_2135_video_frames_0177_to_0272-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs to<br>left. Then collects<br>a coin and a gem.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_0_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_803_level_1367_video_frames_0147_to_0242-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps up<br>the stage. It runs<br>from left to right<br>and jumps on a worm.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_1_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_703_level_2180_video_frames_0426_to_0521-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps<br>down the ladder<br>and jumps up. It<br>collects a gem.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_2_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_803_level_0247_video_frames_0073_to_0168-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_3_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_3_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen climbs up a<br>ladder. It jumps onto<br>a stack of boxes, drops down, and is killed by a worm.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_3_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_803_level_0743_video_frames_0293_to_0388-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_4_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_4_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen climbs a ladder onto a platform and kills a worm. It then walks to the right and towards a gem.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_4_tvb.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vi_mugen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vpk-kitchen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="7">Kitchen (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th><I>K</I> Frames</th>
+                    <th style="width: 160px;">Text</th>
+                    <th><I>K=1</I></th>
+                    <th><I>K=2</I></th>
+                    <th><I>K=3</I></th>
+                    <th><I>K=4</I></th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--p01_12_36-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>open drawer</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p30_08_332-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>put bowl in saucepan</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p06_10_18-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>put glove back</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p08_17_69-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>place pepper shaker</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--p01_11_80-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>rinse knife</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_kitchen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vpk-flintstones">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="7">Flintstones (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th><I>K</I> Frames</th>
+                    <th style="width: 160px;">Text</th>
+                    <th><I>K=1</I></th>
+                    <th><I>K=2</I></th>
+                    <th><I>K=3</I></th>
+                    <th><I>K=4</I></th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--s_01_e_16_shot_004807_004881-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma is talking on the phone.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_01_e_14_shot_016373_016447-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred and Barney shake hands across the rock wall.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_11_shot_030844_030918-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Betty and Wilma<br>are peeking their heads into a room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_15_shot_026698_026772-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Betty and barney are dancing in a room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--s_02_e_23_shot_027456_027530-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred angrily points<br>at Wilma while<br>he talks to her.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_flintstones_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vpk-mugen">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="7">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th><I>K</I> Frames</th>
+                    <th style="width: 160px;">Text</th>
+                    <th><I>K=1</I></th>
+                    <th><I>K=2</I></th>
+                    <th><I>K=3</I></th>
+                    <th><I>K=4</I></th>
+                    <th>GT</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_squat_penalty_gamma_0.99_seed_712_level_0162_video_frames_0139_to_0234-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs to the right and jumps to an upper level, where<br>it collects a coin.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_0_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_squat_penalty_die_reward_1.0_seed_509_level_0021_video_frames_0094_to_0189-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks to the right to get a gem. It then walks past the ladybug and jumps.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_1_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_608_level_3436_video_frames_0039_to_0134-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs to the right, jumps onto<br>a platform, and collects coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_2_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_jump_penalty_seed_201_level_0565_video_frames_0434_to_0529-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks. And then it jumps.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_3_gt.gif" onclick="show(this)" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m3_0_seed_303_level_0021_video_frames_0175_to_0270-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_vp.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen goes from<br>the left and<br>collects coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_k1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_k2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_k3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_k4.gif" /></td>
+                    <td><img src="./press.jpg" id="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vpk_mugen_4_gt.gif" onclick="show(this)" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="cp">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">Flintstones (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th style="width: 160px;">Text 1</th>
+                    <th>Output 1</th>
+                    <th style="width: 160px;">Text 2</th>
+                    <th>Output 2</th>
+                </tr>
+                <tr> <!--s_01_e_03_shot_027087_027161-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_0_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred <B>speaks to</B> a phone and laughs.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_0_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred <B>hangs up</B> a phone and laughs.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_0_1.gif" /></td>
+                </tr>
+                <tr> <!--s_02_e_13_shot_025234_025308-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_1_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred is <B>holding</B><br>a bone beside<br>his head.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_1_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Fred is <B>moving</B> a<br>bone <B>up and down</B><br>beside his head.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_1_1.gif" /></td>
+                </tr>
+                <tr> <!--s_02_e_15_shot_028171_028245-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_2_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma and Betty<br>are <B>walking</B><br><B>through</B> a room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_2_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Wilma and Betty<br>are <B>speaking</B><br><B>in</B> a room.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_flintstones_2_1.gif" /></td>
+                </tr>
+            </table>
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th style="width: 160px;">Text 1</th>
+                    <th>Output 1</th>
+                    <th style="width: 160px;">Text 2</th>
+                    <th>Output 2</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_101_level_0019_video_frames_0377_to_0472-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_0_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen <B>jumps from left to right</B> to <B>an upper platform</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_0_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen <B>runs right<br>to left</B> and<br><B>collects a gem</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_0_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_101_level_0140_video_frames_0096_to_0191-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_1_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs to<br>the right. It <B>jumps<br>down the ground</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_1_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen runs to<br>the right. It <B>jumps<br>landing on a face</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_1_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_301_level_0034_video_frames_0064_to_0159-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_2_vp.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen <B>jumps</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_2_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps and <B>gets a gem and coin</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cp_mugen_2_1.gif" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="cr">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text 1</th>
+                    <th>Output 1</th>
+                    <th style="width: 160px;">Text 2</th>
+                    <th>Output 2</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_301_level_0335_video_frames_0261_to_0356-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks to the right and then <B>jumps over a mouse</B> to collect coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_0_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen walks to the right and then <B>jumps</B> to collect coins.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_0_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_101_level_0076_video_frames_0306_to_0401-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen <b>jumps</b> and moves to left.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_1_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen <b>jumps down from a ladder</b> and moves to left.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_1_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m1_0_seed_301_level_0280_video_frames_0071_to_0166-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen moves from <b>right to left</b> and climbs onto a ladder.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_2_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen moves from <b>left to right</b> and climbs onto a ladder.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/cr_mugen_2_1.gif" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="ci">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="6">MUGEN (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th>First Frame</th>
+                    <th>Last Frame</th>
+                    <th style="width: 160px;">Text 1</th>
+                    <th>Output 1</th>
+                    <th style="width: 160px;">Text 2</th>
+                    <th>Output 2</th>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_608_level_1254_video_frames_0074_to_0169-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_0_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_0_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps down<br>a ladder, collects coins, and then<br><B>jumps down</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_0_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps down<br>a ladder, collects coins, and then<br><B>jumps up and down</B>.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_0_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_608_level_0490_video_frames_0319_to_0414-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_1_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_1_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen collects coins. Then it runs from<br>left to right.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_1_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen collects coins and <B>jumps on face</B>. Then it runs from<br>left to right.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_1_1.gif" /></td>
+                </tr>
+                <tr> <!--model_gamev2_fine_tune_m4_squat_penalty_seed_508_level_1460_video_frames_0295_to_0390-->
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_2_vp.jpg" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_2_vr.jpg" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps to get the coin. It then <B>keeps walking</B> and drops<br>off the platform.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_2_0.gif" /></td>
+                    <td style="font-size: 16px;"><center><I>Mugen jumps to get the coin. It then <B>jumps over a gear</B> and drops off the platform.</I></center></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/ci_mugen_2_1.gif" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br /> <hr />
+    <center><ul class="nav nav-tabs" style="width: 850px;">
+        <li class="dropdown">
+            <a href="#" id="tab-vg" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Video Generation (<I>K</I>=0)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-vg">
+                <li><a href="#vg-ucf101" tabindex="-1" data-toggle="tab"><center>UCF-101 (128<sup>2</sup>)</center></a></li>
+                <li><a href="#vg-bair" tabindex="-1" data-toggle="tab"><center>BAIR (64<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-tvg" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Text-to-Video Generation (<I>K</I>=0)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-tvg">
+                <li><a href="#tvg-ucf101" tabindex="-1" data-toggle="tab"><center>UCF-101 (128<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+        <li class="dropdown">
+            <a href="#" id="tab-tvp" class="dropdown-toggle" data-toggle="dropdown" style="font-size: 18px;">Prediction with Natural Video (<I>K</I>=1)</a>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="tab-tvp">
+                <li><a href="#tvp-webvid" tabindex="-1" data-toggle="tab"><center>WebVid (384<sup>2</sup>)</center></a></li>
+                <li><a href="#tvp-tgif" tabindex="-1" data-toggle="tab"><center>TGIF (384<sup>2</sup>)</center></a></li>
+            </ul>
+        </li>
+    </ul></center>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="vg-ucf101">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">UCF-101 (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_0.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_4.gif" /></td>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_5.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_6.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_7.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_8.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_9.gif" /></td>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_10.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_11.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_12.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_13.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_ucf101_14.gif" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="vg-bair">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">BAIR (64<sup>2</sup>)</th></tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_0.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_4.gif" /></td>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_5.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_6.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_7.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_8.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_9.gif" /></td>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_10.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_11.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_12.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_13.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/vg_bair_14.gif" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="tvg-ucf101">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">UCF-101 (128<sup>2</sup>)</th></tr>
+                <tr>
+                    <th style="font-size: 14px;">Typing</th>
+                    <th style="font-size: 14px;">Writing on Board</th>
+                    <th style="font-size: 14px;">Knitting</th>
+                    <th style="font-size: 14px;">Pull Up</th>
+                    <th style="font-size: 14px;">Mixing</th>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_0.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_1.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_2.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_3.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_4.gif" /></td>
+                </tr>
+                <tr>
+                    <th style="font-size: 14px;">Front Crawl</th>
+                    <th style="font-size: 14px;">Skiing</th>
+                    <th style="font-size: 14px;">Yo Yo</th>
+                    <th style="font-size: 14px;">Playing Guitar</th>
+                    <th style="font-size: 14px;">Surfing</th>
+                </tr>
+                <tr>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_5.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_6.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_7.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_8.gif" /></td>
+                    <td><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvg_ucf101_9.gif" /></td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="tvp-webvid">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">WebVid (384<sup>2</sup>)</th></tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>wash hand</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>cut chicken<br>with knife</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>boy writes<br>in notebook</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>sailboat on<br>horizon</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>cloudscape<br>time-lapse</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_0-sr4.gif" style="width: 96px;" /></td> <!--v_1696252-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_1-sr4.gif" style="width: 96px;" /></td> <!--v_1849888-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_2-sr4.gif" style="width: 96px;" /></td> <!--v_924358-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_3-sr4.gif" style="width: 96px;" /></td> <!--v_1438417-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_4-sr4.gif" style="width: 96px;" /></td> <!--v_3048166-->
+                </tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>type on<br>laptop keyboard</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>downtown city with traffic car</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>cook goulash<br>soup</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>wind turbine</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>flame and wood</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_5-sr4.gif" style="width: 96px;" /></td> <!--v_1374334-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_6-sr4.gif" style="width: 96px;" /></td> <!--v_6181676-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_7-sr4.gif" style="width: 96px;" /></td> <!--v_2525423-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_8-sr4.gif" style="width: 96px;" /></td> <!--v_715216-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_9-sr4.gif" style="width: 96px;" /></td> <!--v_3007798-->
+                </tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>pour coffee<br>into cup</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>walk outdoors<br>on beach</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>high-speed railway link</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>busy city of<br>times square</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>young team<br>busy discusses</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_10-sr4.gif" style="width: 96px;" /></td> <!--v_3166501-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_11-sr4.gif" style="width: 96px;" /></td> <!--v_3809912-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_12-sr4.gif" style="width: 96px;" /></td> <!--v_3942110-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_13-sr4.gif" style="width: 96px;" /></td> <!--v_4964411-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_14-sr4.gif" style="width: 96px;" /></td> <!--v_5489984-->
+                </tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>green sea turtle swims and relaxes</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>man trains on exercise machine</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>flags flatter on strong wind</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>beautiful girl swings</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>river flows under old stone bridge</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_15-sr4.gif" style="width: 96px;" /></td> <!--v_5657345-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_16-sr4.gif" style="width: 96px;" /></td> <!--v_6019190-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_17-sr4.gif" style="width: 96px;" /></td> <!--v_6749338-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_18-sr4.gif" style="width: 96px;" /></td> <!--v_7551070-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_19-sr4.gif" style="width: 96px;" /></td> <!--v_7937311-->
+                </tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>rotates apple lollipop</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>sunset on the baltic sea</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>woman unveils curtain</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>elephant shakes his head</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>hand of man playing guitar</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_20-sr4.gif" style="width: 96px;" /></td> <!--v_9001204-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_21-sr4.gif" style="width: 96px;" /></td> <!--v_13217078-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_22-sr4.gif" style="width: 96px;" /></td> <!--v_11654837-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_23-sr4.gif" style="width: 96px;" /></td> <!--v_13858067-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_24-sr4.gif" style="width: 96px;" /></td> <!--v_14342980-->
+                </tr>
+                <tr>
+                    <th style="width: 120px; font-size: 14px;"><I>designer mixes paint</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>underwater of coral reef</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>drive on<br>empty road</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>child rides<br>a bike</I></th>
+                    <th style="width: 120px; font-size: 14px;"><I>shave his face<br>in bathroom</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_25-sr4.gif" style="width: 96px;" /></td> <!--v_15969346-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_26-sr4.gif" style="width: 96px;" /></td> <!--v_18961010-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_27-sr4.gif" style="width: 96px;" /></td> <!--v_20338390-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_28-sr4.gif" style="width: 96px;" /></td> <!--v_25358237-->
+                    <td style="width: 120px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_webvid_29-sr4.gif" style="width: 96px;" /></td> <!--v_29343313-->
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="tvp-tgif">
+            <br />
+            <table style="border-collapse: collapse; margin: auto;">
+                <tr><th colspan="5">TGIF (384<sup>2</sup>)</th></tr>
+                <tr>
+                    <th style="width: 100px; font-size: 14px;"><I>shove food in his mouth</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>tilt her head</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>hug each other</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>surf in the ocean</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>sing a song</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_0-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8qnb2z4Va1teyig6o1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_1-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8qp6qt1ZD1qa2n7ao1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_2-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8rlcclxUX1tgyi5mo1_250-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_3-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8uuguRNN41txujnro1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_4-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8vlr7Y0CU1sed105o1_500-->
+                </tr>
+                <tr>
+                    <th style="width: 100px; font-size: 14px;"><I>perform in front of audiences</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>skateboard down the hill</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>move his lips</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>talk and smile</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>stick her tongue out</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_5-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8vmds0fd21tufhugo1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_6-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8vpy6hFXB1soz0p7o1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_7-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8wb6eXG2c1thsjzqo1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_8-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8yfuvRPzW1th6vrno1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_9-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nrcmn9qI3r1uajpcto1_400-->
+                </tr>
+                <tr>
+                    <th style="width: 100px; font-size: 14px;"><I>kiss each other</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>ice skating</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>snowboard on a mountain</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>walk</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>palm tree is blowing</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_10-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nnjeqxINyh1sfy3nfo1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_11-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nk6g6jC3h71u0skjdo1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_12-sr4.gif" style="width: 96px;" /></td> <!--tumblr_njug6jqM8D1u636iqo1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_13-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n8tavjHiIF1rulogqo1_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_14-sr4.gif" style="width: 96px;" /></td> <!--tumblr_n6xecn3WXZ1tw9x4ao1_500-->
+                </tr>
+                <tr>
+                    <th style="width: 100px; font-size: 14px;"><I>cut a mini pizza</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>swing his club</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>slap their hands together</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>flying above the clouds</I></th>
+                    <th style="width: 100px; font-size: 14px;"><I>run along<br>a track</I></th>
+                </tr>
+                <tr>
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_15-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nrkqn8quHM1rlpke5o1_250-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_16-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nqzeu4Saoa1uvfg79o1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_17-sr4.gif" style="width: 96px;" /></td> <!--tumblr_nq0ietOo6o1qa3o0zo2_500-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_18-sr4.gif" style="width: 96px;" /></td> <!--tumblr_npwwzp6mxJ1qltbjko1_400-->
+                    <td style="width: 100px; height: 96px;"><img src="https://raw.githubusercontent.com/tvc-mmvg/tvc-mmvg.github.io/main/_qual/tvp_tgif_19-sr4.gif" style="width: 96px;" /></td> <!--tumblr_np7428zJXS1sjggsso1_400-->
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br />
+</body>
+</html>
